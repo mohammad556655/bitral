@@ -1,42 +1,29 @@
-from unittest import result
+""" EMA Indicator
+"""
 
-from test import get_data
-from analyzers import adx
+import math
+
+import pandas
+from talib import abstract
+
+from .utils import IndicatorUtils
 
 
-pairs=['BTC-USDT','ETH-USDT','ADA-USDT','AXS-USDT','SOL-USDT','IOST-USDT','FLOW-USDT','IOTX-USDT','XMR-USDT','ETC-USDT','XTZ-USDT'
-        ,'EGLD-USDT','SAND-USDT','BNB-USDT','ADA-USDT','XRP-USDT','CAKE-USDT','DOGE-USDT','DOT-USDT','AVAX-USDT','MATIC-USDT'
-        ,'ALGO-USDT','ICP-USDT','VET-USDT','AAVE-USDT','AXS-USDT','UNI-USDT','FIL-USDT','SHIB-USDT','EOS-USDT','KCS-USDT'
-        ,'NEAR-USDT','LTC-USDT','ATOM-USDT','LINK-USDT','BCH-USDT','TRX-USDT','XLM-USDT','MANA-USDT','HBAR-USDT','APE-USDT','FTM-USDT','GRT-USDT'
-        ,'THETA-USDT','MKR-USDT']
-for pair in pairs:
-    ohlc = get_data(pair)
-    results = adx.analyze(ohlc,14)
+class EMA(IndicatorUtils):
+    def analyze(self, historical_data, period_count=15):
+        """Performs an EMA analysis on the historical data
 
-    dmi_count = results.shape[0]-1
+                Args:
+                        historical_data (list): A matrix of historical OHCLV data.
+                        period_count (int, optional): Defaults to 15. The number of data points to consider for
+                                our exponential moving average.
 
-    pdi1 = results.pdi[dmi_count]
-    ndi1= results.ndi[dmi_count]
-    adx1 = results.adx[dmi_count]
+                Returns:
+                        pandas.DataFrame: A dataframe containing the indicators and hot/cold values.
+                """
 
-    pdi2 = results.pdi[dmi_count-1]
-    ndi2 = results.ndi[dmi_count-1]
-    adx2 = results.adx[dmi_count-1]
+        ema_values = pandas.DataFrame(abstract.EMA(historical_data.Close, period_count))
+        ema_values.dropna(how='all', inplace=True)
+        ema_values.rename(columns={0: 'ema'}, inplace=True)
 
-    pdi3 = results.pdi[dmi_count-2]
-    ndi3 = results.ndi[dmi_count-2]
-    adx3 = results.adx[dmi_count-2]
-
-    if pdi1>ndi1 and pdi2<ndi2:
-        if(adx1>=23 and adx2<23 and adx2>adx3):
-            print("up adx signal")
-
-    elif pdi1<ndi1 and pdi2>ndi2:
-        if(adx1>=23 and adx2<23 and adx2>adx3):
-            print("down adx signal")
-
-    if(adx1>=23 and adx2<23 and adx2>adx3):
-        if pdi1>ndi1:
-            print("up adx signal")
-        elif pdi1<ndi1:
-            print("down adx signal")
+        return ema_values

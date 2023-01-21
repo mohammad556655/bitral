@@ -1,11 +1,26 @@
-from hashlib import new
-from analyzers import macd
-from get_data import get_data
-import cufflinks as cf
+""" MACD Indicator
+"""
 
-ohlc = get_data()
-macd = macd.MACD()
-results = macd.analyze(ohlc)
+import math
 
-# cf.set_config_file(offline = True)
-# results.iplot()
+import pandas
+from talib import abstract
+
+from .utils import IndicatorUtils
+
+
+class MACD(IndicatorUtils):
+    def analyze(self, historical_data,fastperiod=12, slowperiod=26, signalperiod=9):
+        """Performs a macd analysis on the historical data
+
+        Args:
+            historical_data (list): A matrix of historical OHCLV data.
+
+        Returns:
+            pandas.DataFrame: A dataframe containing the indicators and hot/cold values.
+        """
+
+        macd_values = abstract.MACD(historical_data,fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod).iloc[:]
+        macd_values.dropna(how='all', inplace=True)
+
+        return macd_values
