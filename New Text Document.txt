@@ -1,0 +1,22 @@
+ssh:
+mohammad556655
+eCZ.IZf5LQ5F
+enerating public/private rsa key pair.
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/mohamma6/.ssh/mohammad556655.
+Your public key has been saved in /home/mohamma6/.ssh/mohammad556655.pub.
+The key fingerprint is:
+SHA256:nizDfWkXTkij2+mG1yQHmIudkU4mO3U+nH79qBeeTOs 
+The key's randomart image is:
++---[RSA 2048]----+
+|                 |
+|                 |
+|         +o      |
+|      . Oooo     |
+|       XSB.oo    |
+|     .++=+*=o.o  |
+|      +.*o**o= + |
+|       o.++.o B. |
+|         o...+E..|
++----[SHA256]-----+
